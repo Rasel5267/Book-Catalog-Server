@@ -1,3 +1,4 @@
+import { JwtPayload } from 'jsonwebtoken';
 import { User } from '../user/user.model';
 import { IUser } from './user.interface';
 
@@ -39,8 +40,24 @@ const UpdateUser = async (
   return updatedUser;
 };
 
+const DeleteUser = async (id: string): Promise<void> => {
+  const deletedUser = await User.findByIdAndDelete(id);
+  if (!deletedUser) {
+    throw new Error('No user found!');
+  }
+};
+
+const GetUserProfile = async (user: JwtPayload): Promise<IUser | null> => {
+  const { _id } = user;
+  const userInfo = await User.findById(_id).exec();
+
+  return userInfo;
+};
+
 export const UserService = {
   GetUsers,
   GetUserById,
   UpdateUser,
+  DeleteUser,
+  GetUserProfile,
 };
