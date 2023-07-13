@@ -1,8 +1,8 @@
 import express from 'express';
-import { validateRequest } from '../../middleware/validateRequest';
-import { BookValidation } from './book.validation';
-import { BookController } from './book.controller';
 import auth from '../../middleware/auth';
+import { validateRequest } from '../../middleware/validateRequest';
+import { BookController } from './book.controller';
+import { BookValidation } from './book.validation';
 
 const router = express.Router();
 
@@ -10,7 +10,11 @@ router.post(
   '/create',
   validateRequest(BookValidation.createBookZodSchema),
   auth(),
-  BookController.createBooks
+  BookController.createBook
 );
+
+router.get('/:id', BookController.getBookById);
+
+router.get('/', BookController.getBook);
 
 export const BookRoutes = router;
