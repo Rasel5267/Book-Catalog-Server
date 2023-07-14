@@ -112,6 +112,21 @@ const addToReadingList = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getReadingList = catchAsync(async (req: Request, res: Response) => {
+  if (!req.user) {
+    return;
+  }
+  const user = req.user;
+  const result = await UserService.GetReadingList(user);
+
+  sendResponse<string[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Book retrieved successfully from Reading List',
+    data: result,
+  });
+});
+
 export const UserController = {
   getUsers,
   getUserById,
@@ -121,4 +136,5 @@ export const UserController = {
   addToWishlist,
   getWishlist,
   addToReadingList,
+  getReadingList,
 };

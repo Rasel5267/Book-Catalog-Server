@@ -6,6 +6,7 @@ const router = express.Router();
 
 // Bonus part
 router.get('/wishlist', auth(), UserController.getWishlist);
+router.get('/readingList', auth(), UserController.getReadingList);
 router.post('/addToWishlist/:addBookId', auth(), UserController.addToWishlist);
 router.post(
   '/addToReadingList/:readingBookId',

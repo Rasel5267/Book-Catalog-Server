@@ -104,6 +104,16 @@ const AddToReadingList = async (
   await userInfo.save();
 };
 
+const GetReadingList = async (user: JwtPayload): Promise<string[]> => {
+  const userInfo = await User.findById(user._id).populate('readingList');
+
+  if (!userInfo) {
+    throw new Error('User not found');
+  }
+
+  return userInfo.readingList;
+};
+
 export const UserService = {
   GetUsers,
   GetUserById,
@@ -113,4 +123,5 @@ export const UserService = {
   AddToWishlist,
   GetWishlist,
   AddToReadingList,
+  GetReadingList,
 };
