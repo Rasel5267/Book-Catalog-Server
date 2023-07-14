@@ -87,7 +87,7 @@ const getWishlist = catchAsync(async (req: Request, res: Response) => {
     return;
   }
   const user = req.user;
-  const result = await UserService.GetWishlist(user);
+  const result = await UserService.GetWishlists(user);
 
   sendResponse<string[]>(res, {
     statusCode: httpStatus.OK,
@@ -117,12 +117,42 @@ const getReadingList = catchAsync(async (req: Request, res: Response) => {
     return;
   }
   const user = req.user;
-  const result = await UserService.GetReadingList(user);
+  const result = await UserService.GetReadingLists(user);
 
   sendResponse<string[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Book retrieved successfully from Reading List',
+    data: result,
+  });
+});
+
+const addToFinishedBook = catchAsync(async (req: Request, res: Response) => {
+  if (!req.user || !req.body) {
+    return res.sendStatus(httpStatus.BAD_REQUEST);
+  }
+  const finishedBookId = req.params.finishedBookId;
+  const user = req.user;
+  await UserService.AddToFinishedBook(finishedBookId, user);
+
+  sendResponse<IUser>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Book added to Finished Book List successfully',
+  });
+});
+
+const getFinishedBooks = catchAsync(async (req: Request, res: Response) => {
+  if (!req.user) {
+    return;
+  }
+  const user = req.user;
+  const result = await UserService.GetFinishedBooks(user);
+
+  sendResponse<string[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Book retrieved successfully from Finished Book List',
     data: result,
   });
 });
@@ -137,4 +167,6 @@ export const UserController = {
   getWishlist,
   addToReadingList,
   getReadingList,
+  addToFinishedBook,
+  getFinishedBooks,
 };

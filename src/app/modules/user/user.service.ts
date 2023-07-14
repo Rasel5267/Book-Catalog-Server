@@ -74,7 +74,7 @@ const AddToWishlist = async (
   await userInfo.save();
 };
 
-const GetWishlist = async (user: JwtPayload): Promise<string[]> => {
+const GetWishlists = async (user: JwtPayload): Promise<string[]> => {
   const userInfo = await User.findById(user._id).populate('wishlist');
 
   if (!userInfo) {
@@ -104,7 +104,7 @@ const AddToReadingList = async (
   await userInfo.save();
 };
 
-const GetReadingList = async (user: JwtPayload): Promise<string[]> => {
+const GetReadingLists = async (user: JwtPayload): Promise<string[]> => {
   const userInfo = await User.findById(user._id).populate('readingList');
 
   if (!userInfo) {
@@ -114,6 +114,36 @@ const GetReadingList = async (user: JwtPayload): Promise<string[]> => {
   return userInfo.readingList;
 };
 
+const AddToFinishedBook = async (
+  finishedBookId: string,
+  user: JwtPayload
+): Promise<void> => {
+  const { _id } = user;
+  const userInfo = await User.findById(_id);
+
+  if (!userInfo) {
+    throw new Error('User not found');
+  }
+
+  // Check if the book ID already exists in the wishlist
+  if (userInfo.finishedBooks.includes(finishedBookId)) {
+    throw new Error('Book already exists in the Finished Book List');
+  }
+
+  userInfo.finishedBooks.push(finishedBookId);
+  await userInfo.save();
+};
+
+const GetFinishedBooks = async (user: JwtPayload): Promise<string[]> => {
+  const userInfo = await User.findById(user._id).populate('finishedBooks');
+
+  if (!userInfo) {
+    throw new Error('User not found');
+  }
+
+  return userInfo.finishedBooks;
+};
+
 export const UserService = {
   GetUsers,
   GetUserById,
@@ -121,7 +151,9 @@ export const UserService = {
   DeleteUser,
   GetUserProfile,
   AddToWishlist,
-  GetWishlist,
+  GetWishlists,
   AddToReadingList,
-  GetReadingList,
+  GetReadingLists,
+  AddToFinishedBook,
+  GetFinishedBooks,
 };
