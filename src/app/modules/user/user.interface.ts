@@ -4,10 +4,14 @@ export type IUser = {
   name: string;
   email: string;
   password: string;
+  wishlist: string[];
+  readingList: string[];
+  finishedBooks: string[];
 };
 
 export type IFindUser = {
   _id: string;
+  name: string;
   email: string;
   password: string;
 };
@@ -15,7 +19,7 @@ export type IFindUser = {
 export type UserModel = {
   isUserExist(
     email: string
-  ): Promise<Pick<IFindUser, '_id' | 'email' | 'password'>>;
+  ): Promise<Pick<IFindUser, '_id' | 'name' | 'email' | 'password'>>;
   isPasswordMatched(
     givenPassword: string,
     savedPassword: string

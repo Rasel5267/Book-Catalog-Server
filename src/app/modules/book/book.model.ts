@@ -20,10 +20,17 @@ const bookSchema = new Schema<IBook>(
       required: true,
     },
     publicationDate: {
-      type: Date,
+      type: String,
       required: true,
     },
     publisher: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    review: {
+      type: [String],
+    },
+    reviewer: {
       type: Schema.Types.ObjectId,
       ref: 'User',
     },

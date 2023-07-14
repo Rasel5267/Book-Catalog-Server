@@ -67,10 +67,42 @@ const getUserProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const addToWishlist = catchAsync(async (req: Request, res: Response) => {
+  if (!req.user || !req.body) {
+    return res.sendStatus(httpStatus.BAD_REQUEST);
+  }
+  const addBookId = req.params.addBookId;
+  const user = req.user;
+  await UserService.AddToWishlist(addBookId, user);
+
+  sendResponse<IUser>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Book added to wishlist successfully',
+  });
+});
+
+const getWishlist = catchAsync(async (req: Request, res: Response) => {
+  if (!req.user) {
+    return;
+  }
+  const user = req.user;
+  const result = await UserService.GetWishlist(user);
+
+  sendResponse<string[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Book retrieved successfully from Wishlist',
+    data: result,
+  });
+});
+
 export const UserController = {
   getUsers,
   getUserById,
   updateUser,
   deleteUser,
   getUserProfile,
+  addToWishlist,
+  getWishlist,
 };

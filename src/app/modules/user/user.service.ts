@@ -54,10 +54,42 @@ const GetUserProfile = async (user: JwtPayload): Promise<IUser | null> => {
   return userInfo;
 };
 
+const AddToWishlist = async (
+  addBookId: string,
+  user: JwtPayload
+): Promise<void> => {
+  const { _id } = user;
+  const userInfo = await User.findById(_id);
+
+  if (!userInfo) {
+    throw new Error('User not found');
+  }
+
+  // Check if the book ID already exists in the wishlist
+  if (userInfo.wishlist.includes(addBookId)) {
+    throw new Error('Book already exists in the wishlist');
+  }
+
+  userInfo.wishlist.push(addBookId);
+  await userInfo.save();
+};
+
+const GetWishlist = async (user: JwtPayload): Promise<string[]> => {
+  const userInfo = await User.findById(user._id).populate('wishlist');
+
+  if (!userInfo) {
+    throw new Error('User not found');
+  }
+
+  return userInfo.wishlist;
+};
+
 export const UserService = {
   GetUsers,
   GetUserById,
   UpdateUser,
   DeleteUser,
   GetUserProfile,
+  AddToWishlist,
+  GetWishlist,
 };

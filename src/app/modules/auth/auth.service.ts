@@ -31,16 +31,16 @@ const Login = async (payload: ILogin): Promise<ILoginResponse> => {
 
   // create access token & refresh token
 
-  const { _id, email: userEmail } = isUserExist;
+  const { _id, name, email: userEmail } = isUserExist;
 
   const accessToken = jwtHelpers.createToken(
-    { _id, userEmail },
+    { _id, name, userEmail },
     config.jwt.secret as Secret,
     config.jwt.expires_in as string
   );
 
   const refreshToken = jwtHelpers.createToken(
-    { _id, userEmail },
+    { _id, name, userEmail },
     config.jwt.refresh_secret as Secret,
     config.jwt.refresh_expires_in as string
   );

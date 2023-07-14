@@ -1,21 +1,89 @@
 import { JwtPayload } from 'jsonwebtoken';
-import { IBook } from './book.interface';
+import { SortOrder } from 'mongoose';
+import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { IGenericResponse } from '../../../interfaces/common';
+import { IPaginationOptions } from '../../../interfaces/pagination';
+import { IBook, IBookFilter, bookSearchableFields } from './book.interface';
 import { Book } from './book.model';
 
-const CreateBook = async (book: IBook): Promise<IBook | null> => {
-  const createBook = await Book.create(book);
+const CreateBook = async (
+  book: IBook,
+  user: JwtPayload
+): Promise<IBook | null> => {
+  const createBook = await Book.create({ ...book, publisher: user._id });
   if (!createBook) {
     throw new Error('Failed to create book!');
   }
   return createBook;
 };
 
-const GetBook = async (): Promise<IBook[] | null> => {
-  const books = await Book.find().populate('publisher', 'name');
-  if (!books) {
-    throw new Error('No book found!');
+const GetBooks = async (
+  filters: IBookFilter,
+  paginationOptions: IPaginationOptions
+): Promise<IGenericResponse<IBook[]>> => {
+  const { searchTerm, ...filtersData } = filters;
+
+  const andConditions = [];
+
+  if (searchTerm) {
+    andConditions.push({
+      $or: bookSearchableFields.map(field => ({
+        [field]: {
+          $regex: searchTerm,
+          $options: 'i',
+        },
+      })),
+    });
   }
-  return books;
+
+  if (Object.keys(filtersData).length) {
+    andConditions.push({
+      $and: Object.entries(filtersData).map(([field, value]) => ({
+        [field]: { $regex: value, $options: 'i' },
+      })),
+    });
+  }
+
+  const { page, limit, sortBy, sortOrder } =
+    paginationHelpers.calculatePagination(paginationOptions);
+
+  const sortConditions: { [key: string]: SortOrder } = {};
+
+  if (sortBy && sortOrder) {
+    sortConditions[sortBy] = sortOrder;
+  }
+
+  let query = Book.find();
+
+  if (andConditions.length > 0) {
+    query = query.and(andConditions);
+  }
+
+  const books = await query
+    .sort(sortConditions)
+    .skip((page - 1) * limit)
+    .limit(limit);
+
+  let totalQuery = Book.find();
+
+  if (andConditions.length > 0) {
+    totalQuery = totalQuery.and(andConditions);
+  }
+
+  const total = await totalQuery.countDocuments();
+
+  if (!books) {
+    throw new Error('No cow found!');
+  }
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: books,
+  };
 };
 
 const GetBookById = async (id: string): Promise<IBook | null> => {
@@ -32,9 +100,6 @@ const UpdateBook = async (
   payload: Partial<IBook>
 ): Promise<IBook | null> => {
   const book = await Book.findById(id);
-
-  const userId = String(user._id);
-  console.log(typeof userId);
 
   if (!book) {
     throw new Error('No book found!');
@@ -83,7 +148,7 @@ const DeleteBook = async (id: string, user: JwtPayload): Promise<void> => {
 
 export const BookService = {
   CreateBook,
-  GetBook,
+  GetBooks,
   GetBookById,
   UpdateBook,
   DeleteBook,
