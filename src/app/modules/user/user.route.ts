@@ -7,6 +7,11 @@ const router = express.Router();
 // Bonus part
 router.get('/wishlist', auth(), UserController.getWishlist);
 router.post('/addToWishlist/:addBookId', auth(), UserController.addToWishlist);
+router.post(
+  '/addToReadingList/:readingBookId',
+  auth(),
+  UserController.addToReadingList
+);
 
 //user
 router.get('/:id', auth(), UserController.getUserById);
