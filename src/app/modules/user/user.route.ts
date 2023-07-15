@@ -32,6 +32,12 @@ router.post(
   UserController.removeFromReadingList
 );
 
+router.post(
+  '/removeFromFinishedBooks/:removeFBookId',
+  auth(),
+  UserController.removeFromFinishedBooks
+);
+
 //user
 router.get('/:id', auth(), UserController.getUserById);
 router.patch('/:id', auth(), UserController.updateUser);

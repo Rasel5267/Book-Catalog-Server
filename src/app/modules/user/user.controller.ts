@@ -189,6 +189,23 @@ const getFinishedBooks = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const removeFromFinishedBooks = catchAsync(
+  async (req: Request, res: Response) => {
+    if (!req.user) {
+      return;
+    }
+    const user = req.user;
+    const removeFBookId = req.params.removeFBookId;
+    await UserService.RemoveFromFinishedBooks(user, removeFBookId);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Book successfully remove from Finished Books List',
+    });
+  }
+);
+
 export const UserController = {
   getUsers,
   getUserById,
@@ -203,4 +220,5 @@ export const UserController = {
   getFinishedBooks,
   removeFromWishlist,
   removeFromReadingList,
+  removeFromFinishedBooks,
 };

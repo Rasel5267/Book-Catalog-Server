@@ -166,6 +166,17 @@ const GetFinishedBooks = async (user: JwtPayload): Promise<string[]> => {
   return userInfo.finishedBooks;
 };
 
+const RemoveFromFinishedBooks = async (
+  user: JwtPayload,
+  removeFBookId: string
+): Promise<void> => {
+  await User.findOneAndUpdate(
+    { _id: user._id },
+    { $pull: { finishedBooks: removeFBookId } },
+    { new: true }
+  );
+};
+
 export const UserService = {
   GetUsers,
   GetUserById,
@@ -180,4 +191,5 @@ export const UserService = {
   GetFinishedBooks,
   RemoveFromWishlist,
   RemoveFromReadingList,
+  RemoveFromFinishedBooks,
 };
