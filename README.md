@@ -41,13 +41,16 @@
 
 - Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books/addToWishlist/:64b1634fba9a206197aebf92(POST)
 - Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books/wishlist (GET)
+- Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/users/removeFromWishlist/64b1634fba9a206197aebf92 (POST)
 
 #### Reading List
 
 - Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books/addToReadingList/:64b1634fba9a206197aebf92(POST)
 - Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books/readingList (GET)
+- Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/users/removeFromReadingList/64b1634fba9a206197aebf92 (POST)
 
 #### Finished Book List
 
 - Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books/addToFinishedBook/:64b1634fba9a206197aebf92(POST)
 - Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books/finishedBooks (GET)
+- Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/users/removeFromFinishedBooks/64b1634fba9a206197aebf92 (POST)
