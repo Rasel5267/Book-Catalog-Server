@@ -26,6 +26,12 @@ router.post(
   UserController.removeFromWishlist
 );
 
+router.post(
+  '/removeFromReadingList/:removeRBookId',
+  auth(),
+  UserController.removeFromReadingList
+);
+
 //user
 router.get('/:id', auth(), UserController.getUserById);
 router.patch('/:id', auth(), UserController.updateUser);
