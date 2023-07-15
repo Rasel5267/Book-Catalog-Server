@@ -11,6 +11,10 @@ const bookSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    image: {
+        type: String,
+        required: true,
+    },
     description: {
         type: String,
         required: true,
@@ -27,13 +31,17 @@ const bookSchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',
     },
-    review: {
-        type: [String],
-    },
-    reviewer: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'User',
-    },
+    reviews: [
+        {
+            review: {
+                type: String,
+            },
+            reviewer: {
+                type: mongoose_1.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        },
+    ],
 }, {
     timestamps: true,
     versionKey: false,

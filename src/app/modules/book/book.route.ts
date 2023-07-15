@@ -13,6 +13,8 @@ router.post(
   BookController.createBook
 );
 
+router.post('/review/:id', auth(), BookController.addReview);
+
 router.get('/:id', BookController.getBookById);
 
 router.patch('/:id', auth(), BookController.updateBook);

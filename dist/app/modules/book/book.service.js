@@ -50,7 +50,11 @@ const GetBooks = (filters) => __awaiter(void 0, void 0, void 0, function* () {
             })),
         });
     }
-    let query = book_model_1.Book.find();
+    let query = book_model_1.Book.find().populate({
+        path: 'reviews.reviewer',
+        model: 'User',
+        select: 'name',
+    });
     if (andConditions.length > 0) {
         query = query.and(andConditions);
     }
@@ -89,8 +93,6 @@ const UpdateBook = (id, user, payload) => __awaiter(void 0, void 0, void 0, func
 });
 const DeleteBook = (id, user) => __awaiter(void 0, void 0, void 0, function* () {
     const book = yield book_model_1.Book.findById(id);
-    const userId = String(user._id);
-    console.log(typeof userId);
     if (!book) {
         throw new Error('No book found!');
     }
@@ -102,10 +104,26 @@ const DeleteBook = (id, user) => __awaiter(void 0, void 0, void 0, function* () 
         }
     }
 });
+const AddReview = (id, user, reviewData) => __awaiter(void 0, void 0, void 0, function* () {
+    const book = yield book_model_1.Book.findById(id);
+    if (!book) {
+        throw new Error('No book found!');
+    }
+    // Extract the "review" value if reviewData is an object
+    const review = typeof reviewData === 'string' ? reviewData : reviewData.review;
+    const newReview = {
+        review: review,
+        reviewer: user._id,
+    };
+    book.reviews.push(newReview);
+    const updatedBook = yield book.save();
+    return updatedBook;
+});
 exports.BookService = {
     CreateBook,
     GetBooks,
     GetBookById,
     UpdateBook,
     DeleteBook,
+    AddReview,
 };

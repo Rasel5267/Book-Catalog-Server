@@ -3,12 +3,17 @@ import { Model, ObjectId } from 'mongoose';
 export type IBook = {
   title: string;
   author: string;
+  image: string;
   description: string;
   genre: string;
   publicationDate: string;
   publisher?: ObjectId;
-  review: string[];
-  reviewer?: ObjectId;
+  reviews?: object[];
+};
+
+export type IReview = {
+  review: string;
+  reviewer: ObjectId;
 };
 
 export type BookModel = Model<IBook, Record<string, unknown>>;

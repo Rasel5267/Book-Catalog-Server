@@ -1,5 +1,10 @@
 import { JwtPayload } from 'jsonwebtoken';
-import { IBook, IBookFilter, bookSearchableFields } from './book.interface';
+import {
+  IBook,
+  IBookFilter,
+  IReview,
+  bookSearchableFields,
+} from './book.interface';
 import { Book } from './book.model';
 
 const CreateBook = async (
@@ -37,7 +42,11 @@ const GetBooks = async (filters: IBookFilter): Promise<IBook[]> => {
     });
   }
 
-  let query = Book.find();
+  let query = Book.find().populate({
+    path: 'reviews.reviewer',
+    model: 'User',
+    select: 'name',
+  });
 
   if (andConditions.length > 0) {
     query = query.and(andConditions);
@@ -95,9 +104,6 @@ const UpdateBook = async (
 const DeleteBook = async (id: string, user: JwtPayload): Promise<void> => {
   const book = await Book.findById(id);
 
-  const userId = String(user._id);
-  console.log(typeof userId);
-
   if (!book) {
     throw new Error('No book found!');
   }
@@ -112,10 +118,37 @@ const DeleteBook = async (id: string, user: JwtPayload): Promise<void> => {
   }
 };
 
+const AddReview = async (
+  id: string,
+  user: JwtPayload,
+  reviewData: string | { review: string }
+): Promise<IBook> => {
+  const book = await Book.findById(id);
+
+  if (!book) {
+    throw new Error('No book found!');
+  }
+
+  // Extract the "review" value if reviewData is an object
+  const review =
+    typeof reviewData === 'string' ? reviewData : reviewData.review;
+
+  const newReview: IReview = {
+    review: review,
+    reviewer: user._id,
+  };
+
+  book.reviews!.push(newReview);
+
+  const updatedBook = await book.save();
+  return updatedBook;
+};
+
 export const BookService = {
   CreateBook,
   GetBooks,
   GetBookById,
   UpdateBook,
   DeleteBook,
+  AddReview,
 };

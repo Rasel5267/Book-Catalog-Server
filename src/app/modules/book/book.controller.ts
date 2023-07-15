@@ -18,7 +18,7 @@ const createBook = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IBook>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Books retrieved successfully',
+    message: 'Books Created successfully',
     data: result,
   });
 });
@@ -80,10 +80,28 @@ const deleteBook = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const addReview = catchAsync(async (req: Request, res: Response) => {
+  if (!req.user || !req.body) {
+    return res.sendStatus(httpStatus.BAD_REQUEST);
+  }
+  const id = req.params.id;
+  const user = req.user;
+  const reviewData = req.body;
+  const result = await BookService.AddReview(id, user, reviewData);
+
+  sendResponse<IBook>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Add Review successfully',
+    data: result,
+  });
+});
+
 export const BookController = {
   createBook,
   getBooks,
   getBookById,
   updateBook,
   deleteBook,
+  addReview,
 };
