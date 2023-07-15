@@ -158,6 +158,12 @@ const AddToFinishedBook = async (
     throw new Error('Book already exists in the Finished Book List');
   }
 
+  // Remove the book from the wishlist
+  const bookIndex = userInfo.readingList.indexOf(finishedBookId);
+  if (bookIndex !== -1) {
+    userInfo.readingList.splice(bookIndex, 1);
+  }
+
   userInfo.finishedBooks.push(finishedBookId);
   await userInfo.save();
 };
