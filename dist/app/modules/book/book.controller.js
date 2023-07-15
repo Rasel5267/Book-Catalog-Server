@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookController = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const pagination_1 = require("../../../constant/pagination");
 const catchAsync_1 = require("../../../shared/catchAsync");
 const pick_1 = __importDefault(require("../../../shared/pick"));
 const sendResponse_1 = require("../../../shared/sendResponse");
@@ -36,14 +35,12 @@ const createBook = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, 
 }));
 const getBooks = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const filters = (0, pick_1.default)(req.query, book_constant_1.bookFilterableFields);
-    const paginationOptions = (0, pick_1.default)(req.query, pagination_1.paginationFields);
-    const result = yield book_service_1.BookService.GetBooks(filters, paginationOptions);
+    const result = yield book_service_1.BookService.GetBooks(filters);
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'Books retrieved successfully',
-        meta: result.meta,
-        data: result.data,
+        data: result,
     });
 }));
 const getBookById = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

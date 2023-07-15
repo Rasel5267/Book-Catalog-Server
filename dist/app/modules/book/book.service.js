@@ -21,7 +21,6 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookService = void 0;
-const paginationHelper_1 = require("../../../helpers/paginationHelper");
 const book_interface_1 = require("./book.interface");
 const book_model_1 = require("./book.model");
 const CreateBook = (book, user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -31,7 +30,7 @@ const CreateBook = (book, user) => __awaiter(void 0, void 0, void 0, function* (
     }
     return createBook;
 });
-const GetBooks = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
+const GetBooks = (filters) => __awaiter(void 0, void 0, void 0, function* () {
     const { searchTerm } = filters, filtersData = __rest(filters, ["searchTerm"]);
     const andConditions = [];
     if (searchTerm) {
@@ -51,35 +50,15 @@ const GetBooks = (filters, paginationOptions) => __awaiter(void 0, void 0, void 
             })),
         });
     }
-    const { page, limit, sortBy, sortOrder } = paginationHelper_1.paginationHelpers.calculatePagination(paginationOptions);
-    const sortConditions = {};
-    if (sortBy && sortOrder) {
-        sortConditions[sortBy] = sortOrder;
-    }
     let query = book_model_1.Book.find();
     if (andConditions.length > 0) {
         query = query.and(andConditions);
     }
-    const books = yield query
-        .sort(sortConditions)
-        .skip((page - 1) * limit)
-        .limit(limit);
-    let totalQuery = book_model_1.Book.find();
-    if (andConditions.length > 0) {
-        totalQuery = totalQuery.and(andConditions);
-    }
-    const total = yield totalQuery.countDocuments();
+    const books = yield query;
     if (!books) {
         throw new Error('No cow found!');
     }
-    return {
-        meta: {
-            page,
-            limit,
-            total,
-        },
-        data: books,
-    };
+    return books;
 });
 const GetBookById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const books = yield book_model_1.Book.findById(id);

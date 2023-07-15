@@ -1,8 +1,4 @@
 import { JwtPayload } from 'jsonwebtoken';
-import { SortOrder } from 'mongoose';
-import { paginationHelpers } from '../../../helpers/paginationHelper';
-import { IGenericResponse } from '../../../interfaces/common';
-import { IPaginationOptions } from '../../../interfaces/pagination';
 import { IBook, IBookFilter, bookSearchableFields } from './book.interface';
 import { Book } from './book.model';
 
@@ -17,10 +13,7 @@ const CreateBook = async (
   return createBook;
 };
 
-const GetBooks = async (
-  filters: IBookFilter,
-  paginationOptions: IPaginationOptions
-): Promise<IGenericResponse<IBook[]>> => {
+const GetBooks = async (filters: IBookFilter): Promise<IBook[]> => {
   const { searchTerm, ...filtersData } = filters;
 
   const andConditions = [];
@@ -44,46 +37,19 @@ const GetBooks = async (
     });
   }
 
-  const { page, limit, sortBy, sortOrder } =
-    paginationHelpers.calculatePagination(paginationOptions);
-
-  const sortConditions: { [key: string]: SortOrder } = {};
-
-  if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder;
-  }
-
   let query = Book.find();
 
   if (andConditions.length > 0) {
     query = query.and(andConditions);
   }
 
-  const books = await query
-    .sort(sortConditions)
-    .skip((page - 1) * limit)
-    .limit(limit);
-
-  let totalQuery = Book.find();
-
-  if (andConditions.length > 0) {
-    totalQuery = totalQuery.and(andConditions);
-  }
-
-  const total = await totalQuery.countDocuments();
+  const books = await query;
 
   if (!books) {
     throw new Error('No cow found!');
   }
 
-  return {
-    meta: {
-      page,
-      limit,
-      total,
-    },
-    data: books,
-  };
+  return books;
 };
 
 const GetBookById = async (id: string): Promise<IBook | null> => {
