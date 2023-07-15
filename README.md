@@ -22,13 +22,11 @@
 - Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/users/64b06bc80bb4a2b0d73a8485 (PATCH)
 - Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/users/64b06bc80bb4a2b0d73a8485 (DELETE)
 
-### Pagination and Filtering Routes of Books
+### Filtering Routes of Books
 
-- Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books?page=1&limit=10
-- Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books?sortBy=publicationDate&sortOrder=asc
 - Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books?genre=sci (This value is also case insensitive.)
 - Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books?publicationDate=1990
-- Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books?searchTerm=lee
+- Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books?searchTerm=lee (You can search by title, author, description, genre)
 
 ### Books
 
@@ -37,7 +35,7 @@
 - Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books/64b1634fba9a206197aebf92 (PATCH)
 - Route: https://cow-hut-admin-with-auth-assignment.vercel.app/api/v1/books/64b1634fba9a206197aebf92 (DELETE)
 
-### Bonus
+## Bonus
 
 #### Wishlist
 
