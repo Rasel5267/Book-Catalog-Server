@@ -111,6 +111,12 @@ const AddToReadingList = async (
     throw new Error('Book already exists in the Reading List');
   }
 
+  // Remove the book from the wishlist
+  const bookIndex = userInfo.wishlist.indexOf(readingBookId);
+  if (bookIndex !== -1) {
+    userInfo.wishlist.splice(bookIndex, 1);
+  }
+
   userInfo.readingList.push(readingBookId);
   await userInfo.save();
 };
