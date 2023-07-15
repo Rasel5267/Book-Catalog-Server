@@ -97,6 +97,21 @@ const getWishlist = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const removeFromWishlist = catchAsync(async (req: Request, res: Response) => {
+  if (!req.user) {
+    return;
+  }
+  const user = req.user;
+  const removeWBookId = req.params.removeWBookId;
+  await UserService.RemoveFromWishlist(user, removeWBookId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Book successfully remove from Wishlist',
+  });
+});
+
 const addToReadingList = catchAsync(async (req: Request, res: Response) => {
   if (!req.user || !req.body) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
@@ -169,4 +184,5 @@ export const UserController = {
   getReadingList,
   addToFinishedBook,
   getFinishedBooks,
+  removeFromWishlist,
 };

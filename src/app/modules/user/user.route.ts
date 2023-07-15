@@ -20,6 +20,12 @@ router.post(
   UserController.addToFinishedBook
 );
 
+router.post(
+  '/removeFromWishlist/:removeWBookId',
+  auth(),
+  UserController.removeFromWishlist
+);
+
 //user
 router.get('/:id', auth(), UserController.getUserById);
 router.patch('/:id', auth(), UserController.updateUser);
