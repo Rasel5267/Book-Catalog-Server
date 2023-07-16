@@ -45,8 +45,14 @@ const Login = async (payload: ILogin): Promise<ILoginResponse> => {
     config.jwt.refresh_expires_in as string
   );
 
+  const user = {
+    id: isUserExist._id,
+    name: isUserExist.name,
+  };
+
   return {
     accessToken,
+    user,
     refreshToken,
   };
 };
