@@ -64,15 +64,15 @@ const GetBooks = (filters) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return books;
 });
-const GetBookById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const books = yield book_model_1.Book.findById(id);
+const GetBookById = (getBookId) => __awaiter(void 0, void 0, void 0, function* () {
+    const books = yield book_model_1.Book.findById(getBookId);
     if (!books) {
         throw new Error('No book found!');
     }
     return books;
 });
-const UpdateBook = (id, user, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const book = yield book_model_1.Book.findById(id);
+const UpdateBook = (updateBookId, user, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const book = yield book_model_1.Book.findById(updateBookId);
     if (!book) {
         throw new Error('No book found!');
     }
@@ -83,7 +83,7 @@ const UpdateBook = (id, user, payload) => __awaiter(void 0, void 0, void 0, func
     if ('publisher' in payload) {
         throw new Error('Cannot update the publisher field');
     }
-    const updatedBook = yield book_model_1.Book.findByIdAndUpdate(id, payload, {
+    const updatedBook = yield book_model_1.Book.findByIdAndUpdate(updateBookId, payload, {
         new: true,
     });
     if (!updatedBook) {
@@ -91,14 +91,14 @@ const UpdateBook = (id, user, payload) => __awaiter(void 0, void 0, void 0, func
     }
     return updatedBook;
 });
-const DeleteBook = (id, user) => __awaiter(void 0, void 0, void 0, function* () {
-    const book = yield book_model_1.Book.findById(id);
+const DeleteBook = (deleteBookId, user) => __awaiter(void 0, void 0, void 0, function* () {
+    const book = yield book_model_1.Book.findById(deleteBookId);
     if (!book) {
         throw new Error('No book found!');
     }
     const areEqual = book.publisher && book.publisher.toString() === user._id;
     if (areEqual) {
-        const deletedBook = yield book_model_1.Book.findByIdAndDelete(id);
+        const deletedBook = yield book_model_1.Book.findByIdAndDelete(deleteBookId);
         if (!deletedBook) {
             throw new Error('No user found!');
         }

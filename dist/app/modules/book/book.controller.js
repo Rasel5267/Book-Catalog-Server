@@ -44,8 +44,8 @@ const getBooks = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, vo
     });
 }));
 const getBookById = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.params.id;
-    const result = yield book_service_1.BookService.GetBookById(id);
+    const getBookId = req.params.getBookId;
+    const result = yield book_service_1.BookService.GetBookById(getBookId);
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -57,10 +57,10 @@ const updateBook = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, 
     if (!req.user || !req.body) {
         return res.sendStatus(http_status_1.default.BAD_REQUEST);
     }
-    const id = req.params.id;
+    const updateBookId = req.params.updateBookId;
     const user = req.user;
     const updatedData = req.body;
-    const result = yield book_service_1.BookService.UpdateBook(id, user, updatedData);
+    const result = yield book_service_1.BookService.UpdateBook(updateBookId, user, updatedData);
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -72,9 +72,9 @@ const deleteBook = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, 
     if (!req.user || !req.body) {
         return res.sendStatus(http_status_1.default.BAD_REQUEST);
     }
-    const id = req.params.id;
+    const deleteBookId = req.params.deleteBookId;
     const user = req.user;
-    yield book_service_1.BookService.DeleteBook(id, user);
+    yield book_service_1.BookService.DeleteBook(deleteBookId, user);
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_1.default.OK,
         success: true,

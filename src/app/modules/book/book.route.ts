@@ -15,11 +15,11 @@ router.post(
 
 router.post('/review/:id', auth(), BookController.addReview);
 
-router.get('/:id', BookController.getBookById);
+router.get('/:getBookId', BookController.getBookById);
 
-router.patch('/:id', auth(), BookController.updateBook);
+router.patch('/:updateBookId', auth(), BookController.updateBook);
 
-router.delete('/:id', auth(), BookController.deleteBook);
+router.delete('/:deleteBookId', auth(), BookController.deleteBook);
 
 router.get('/', BookController.getBooks);
 

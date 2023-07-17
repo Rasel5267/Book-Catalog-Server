@@ -20,6 +20,7 @@ const auth = () => (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     try {
         //get authorization token
         const token = req.headers.authorization;
+        console.log(token);
         if (!token) {
             throw new ApiError_1.ApiError(http_status_1.default.UNAUTHORIZED, 'You are not authorized');
         }
