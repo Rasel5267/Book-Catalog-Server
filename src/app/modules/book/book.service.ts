@@ -42,11 +42,7 @@ const GetBooks = async (filters: IBookFilter): Promise<IBook[]> => {
     });
   }
 
-  let query = Book.find().populate({
-    path: 'reviews.reviewer',
-    model: 'User',
-    select: 'name',
-  });
+  let query = Book.find();
 
   if (andConditions.length > 0) {
     query = query.and(andConditions);
@@ -62,7 +58,11 @@ const GetBooks = async (filters: IBookFilter): Promise<IBook[]> => {
 };
 
 const GetBookById = async (getBookId: string): Promise<IBook | null> => {
-  const books = await Book.findById(getBookId);
+  const books = await Book.findById(getBookId).populate({
+    path: 'reviews.reviewer',
+    model: 'User',
+    select: 'name',
+  });
   if (!books) {
     throw new Error('No book found!');
   }

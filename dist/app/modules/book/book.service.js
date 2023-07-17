@@ -50,11 +50,7 @@ const GetBooks = (filters) => __awaiter(void 0, void 0, void 0, function* () {
             })),
         });
     }
-    let query = book_model_1.Book.find().populate({
-        path: 'reviews.reviewer',
-        model: 'User',
-        select: 'name',
-    });
+    let query = book_model_1.Book.find();
     if (andConditions.length > 0) {
         query = query.and(andConditions);
     }
@@ -65,7 +61,11 @@ const GetBooks = (filters) => __awaiter(void 0, void 0, void 0, function* () {
     return books;
 });
 const GetBookById = (getBookId) => __awaiter(void 0, void 0, void 0, function* () {
-    const books = yield book_model_1.Book.findById(getBookId);
+    const books = yield book_model_1.Book.findById(getBookId).populate({
+        path: 'reviews.reviewer',
+        model: 'User',
+        select: 'name',
+    });
     if (!books) {
         throw new Error('No book found!');
     }
