@@ -70,7 +70,7 @@ const GetReview = (reviewBookId) => __awaiter(void 0, void 0, void 0, function* 
     }
     const reviewsWithReviewerName = book.reviews.map((review) => ({
         review: review.review,
-        reviewer: review.reviewer ? review.reviewer._id : null,
+        reviewer: review.reviewer ? { name: review.reviewer.name } : null,
     }));
     return reviewsWithReviewerName;
 });

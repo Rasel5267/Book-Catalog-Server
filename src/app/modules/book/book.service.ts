@@ -71,7 +71,7 @@ const GetReview = async (reviewBookId: string): Promise<IReview[] | null> => {
   const reviewsWithReviewerName: IReview[] = book.reviews.map(
     (review: any) => ({
       review: review.review,
-      reviewer: review.reviewer ? review.reviewer._id : null,
+      reviewer: review.reviewer ? { name: review.reviewer.name } : null,
     })
   );
 
