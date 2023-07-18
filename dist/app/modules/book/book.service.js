@@ -60,6 +60,20 @@ const GetBooks = (filters) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return books;
 });
+const GetReview = (reviewBookId) => __awaiter(void 0, void 0, void 0, function* () {
+    const book = yield book_model_1.Book.findById(reviewBookId).populate('reviews.reviewer');
+    if (!book) {
+        return null;
+    }
+    if (!book.reviews || book.reviews.length === 0) {
+        return null;
+    }
+    const reviewsWithReviewerName = book.reviews.map((review) => ({
+        review: review.review,
+        reviewer: review.reviewer ? review.reviewer._id : null,
+    }));
+    return reviewsWithReviewerName;
+});
 const GetBookById = (getBookId) => __awaiter(void 0, void 0, void 0, function* () {
     const books = yield book_model_1.Book.findById(getBookId).populate({
         path: 'reviews.reviewer',
@@ -126,4 +140,5 @@ exports.BookService = {
     UpdateBook,
     DeleteBook,
     AddReview,
+    GetReview,
 };

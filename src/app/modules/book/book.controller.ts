@@ -4,7 +4,7 @@ import { catchAsync } from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import { sendResponse } from '../../../shared/sendResponse';
 import { bookFilterableFields } from './book.constant';
-import { IBook } from './book.interface';
+import { IBook, IReview } from './book.interface';
 import { BookService } from './book.service';
 
 const createBook = catchAsync(async (req: Request, res: Response) => {
@@ -32,6 +32,18 @@ const getBooks = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Books retrieved successfully',
+    data: result,
+  });
+});
+
+const getReview = catchAsync(async (req: Request, res: Response) => {
+  const reviewBookId = req.params.reviewBookId;
+  const result = await BookService.GetReview(reviewBookId);
+
+  sendResponse<IReview[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Review retrieved successfully',
     data: result,
   });
 });
@@ -104,4 +116,5 @@ export const BookController = {
   updateBook,
   deleteBook,
   addReview,
+  getReview,
 };

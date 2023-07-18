@@ -57,6 +57,27 @@ const GetBooks = async (filters: IBookFilter): Promise<IBook[]> => {
   return books;
 };
 
+const GetReview = async (reviewBookId: string): Promise<IReview[] | null> => {
+  const book = await Book.findById(reviewBookId).populate('reviews.reviewer');
+
+  if (!book) {
+    return null;
+  }
+
+  if (!book.reviews || book.reviews.length === 0) {
+    return null;
+  }
+
+  const reviewsWithReviewerName: IReview[] = book.reviews.map(
+    (review: any) => ({
+      review: review.review,
+      reviewer: review.reviewer ? review.reviewer._id : null,
+    })
+  );
+
+  return reviewsWithReviewerName;
+};
+
 const GetBookById = async (getBookId: string): Promise<IBook | null> => {
   const books = await Book.findById(getBookId).populate({
     path: 'reviews.reviewer',
@@ -154,4 +175,5 @@ export const BookService = {
   UpdateBook,
   DeleteBook,
   AddReview,
+  GetReview,
 };

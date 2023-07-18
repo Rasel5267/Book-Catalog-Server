@@ -43,6 +43,16 @@ const getBooks = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, vo
         data: result,
     });
 }));
+const getReview = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const reviewBookId = req.params.reviewBookId;
+    const result = yield book_service_1.BookService.GetReview(reviewBookId);
+    (0, sendResponse_1.sendResponse)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Review retrieved successfully',
+        data: result,
+    });
+}));
 const getBookById = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const getBookId = req.params.getBookId;
     const result = yield book_service_1.BookService.GetBookById(getBookId);
@@ -103,4 +113,5 @@ exports.BookController = {
     updateBook,
     deleteBook,
     addReview,
+    getReview,
 };

@@ -11,6 +11,7 @@ const book_controller_1 = require("./book.controller");
 const book_validation_1 = require("./book.validation");
 const router = express_1.default.Router();
 router.post('/create', (0, validateRequest_1.validateRequest)(book_validation_1.BookValidation.createBookZodSchema), (0, auth_1.default)(), book_controller_1.BookController.createBook);
+router.get('/review/:reviewBookId', book_controller_1.BookController.getReview);
 router.post('/review/:id', (0, auth_1.default)(), book_controller_1.BookController.addReview);
 router.get('/:getBookId', book_controller_1.BookController.getBookById);
 router.patch('/:updateBookId', (0, auth_1.default)(), book_controller_1.BookController.updateBook);
